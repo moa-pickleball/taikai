@@ -3,7 +3,7 @@
   'use strict';
   root.CONFIG = {
     API_URL: 'https://script.google.com/macros/s/AKfycbz9XXADiWNiOd_3KMfhZO2nDyTTyxFtPZWbILQP6om6xMtC_GdOfF2PRWnMRbFiIbMa/exec',
-    SITE_URL: 'https://xxknaokixx.github.io/moapi-taikai',
+    SITE_URL: 'https://moa-pickleball.github.io/taikai',
     ORGANIZER: 'もあピックルボール'
   };
 })(this);
