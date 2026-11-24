@@ -48,7 +48,13 @@ p{margin:8px 0}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .btn-row .btn{flex:1 1 200px}
 .btn.link{background:none;color:var(--accent);min-height:44px;width:auto;padding:6px 0;font-weight:400;font-size:16px;justify-content:flex-start}
-.field{margin:14px 0}
+/* position:relative は、所属サークルの入力候補（club-suggest.js）を欄のすぐ下に重ねるため */
+.field{margin:14px 0;position:relative}
+/* 所属サークルの入力候補 */
+.suggest{position:absolute;left:0;right:0;z-index:5;margin:2px 0 0;padding:0;list-style:none;background:#fff;border:1px solid var(--input-border);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15);overflow:hidden}
+.suggest[hidden]{display:none}
+.suggest li{min-height:40px;padding:10px 12px;font-size:16px;cursor:pointer}
+.suggest li:hover,.suggest li[aria-selected="true"]{background:var(--accent-bg)}
 label,.lbl{display:block;font-weight:700;margin-bottom:4px;font-size:16px}
 .ymd{display:flex;align-items:center;gap:4px}
 .ymd input{flex:0 1 auto;min-width:0;text-align:center;padding:10px 4px}

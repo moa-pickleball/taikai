@@ -53,7 +53,7 @@
       '<input class="md" type="text" inputmode="numeric" maxlength="2" aria-label="月" placeholder="4"' + h('bm') + ac('bday-month') + '><span>月</span>' +
       '<input class="md" type="text" inputmode="numeric" maxlength="2" aria-label="日" placeholder="1"' + h('bd') + ac('bday-day') + '><span>日</span></div>' +
       (rep ? '<p class="hint">Age 40+ など年齢区分の確認に使います。</p>' : '') + err('birth') + '</div>' +
-      '<div class="field"><label for="' + p + '-club">所属サークル<span class="req">必須</span></label><input type="text" id="' + p + '-club"' + h('club') + ' list="club-list" autocomplete="off"><p class="hint">ない場合は「フリー」と入力してください。</p>' + err('club') + '</div>' +
+      '<div class="field"><label for="' + p + '-club">所属サークル<span class="req">必須</span></label><input type="text" id="' + p + '-club"' + h('club') + ' autocomplete="off"><p class="hint">ない場合は「フリー」と入力してください。</p>' + err('club') + '</div>' +
       '<div class="field dupr" role="group" aria-labelledby="' + p + '-dl"><div class="lbl" id="' + p + '-dl">DUPR<span class="req">必須</span></div>' +
       '<div class="seg"><label><input type="radio" name="dupr-' + p + '" value="yes"><span>持っている</span></label><label><input type="radio" name="dupr-' + p + '" value="none"><span>持っていない（なし）</span></label></div>' +
       '<div class="dupr-num"><input type="text" inputmode="decimal" aria-label="DUPRの数字" placeholder="例：3.45" autocomplete="off"' + h('dupr') + '></div>' +

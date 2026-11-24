@@ -134,7 +134,6 @@
     $('#v-form').innerHTML =
       '<button class="btn link" type="button" id="back">← 大会ページに戻る</button>' +
       '<h1>エントリー</h1><p class="muted" id="form-sub"></p>' +
-      '<datalist id="club-list"></datalist>' +
       '<form id="entry-form" novalidate>' +
       '<div class="field pc-half"><label for="cat">出場カテゴリ<span class="req">必須</span></label><select id="cat"></select><p class="hint" id="cat-hint"></p><p class="err" data-err="categoryId"></p></div>' +
       PF.html('p1', '代表者（あなた）', true) + PF.html('p2', 'ペア（パートナー）', false) +
@@ -146,6 +145,10 @@
     $('#entry-form').addEventListener('submit', onSubmit);
     $('#cat').addEventListener('change', updateCatHint);
     PF.bind($('#entry-form'));
+    // 所属サークルの入力候補（既にエントリーのあるサークル名。入力した文字に合うものだけ出す）
+    ['#p1-club', '#p2-club'].forEach(function (sel) {
+      root.ClubSuggest.attach($(sel), function () { return data.clubs; });
+    });
     doc.querySelectorAll('#entry-form input, #entry-form select').forEach(function (el) {
       el.addEventListener('input', function () { clearErr(el); });
     });
@@ -170,12 +173,6 @@
     if (prev) sel.value = prev;                 // 選んだカテゴリが終わっていても、勝手に別のカテゴリへ替えない
     else if (sel.options.length) sel.selectedIndex = 0;
     updateCatHint();
-    updateClubList();
-  }
-  // 所属サークルの入力候補（既にエントリーのあるサークル名）
-  function updateClubList() {
-    var dl = $('#club-list');
-    if (dl) dl.innerHTML = data.clubs.map(function (c) { return '<option value="' + esc(c) + '">'; }).join('');
   }
   function updateCatHint() {
     var c = findCat($('#cat').value);
