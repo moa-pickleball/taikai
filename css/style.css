@@ -156,3 +156,6 @@ tr.cancelled td:nth-child(2){text-decoration:none}
   table.atable .chip{font-size:13px;padding:2px 8px}
   .btn.mini{padding:6px 8px;font-size:13px}
 }
+
+/* 入力欄を押したら、見本の文字（placeholder）を消す。見本の数字が入力済みの値に見えてしまうため */
+input:focus::placeholder,textarea:focus::placeholder{color:transparent}

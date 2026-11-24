@@ -44,7 +44,7 @@
   }
   function explain(e) {
     if (e.status === 'キャンセル待ち') return '<p>空きが出たら、順番に自動で「確定」になり、メールでお知らせします。まだ確定ではないのでご注意ください。</p>';
-    if (e.status === 'キャンセル') return '<p class="muted">この申込みはキャンセル済みです。</p>';
+    if (e.status === 'キャンセル') return '<p class="muted">この申し込みはキャンセル済みです。</p>';
     if (e.status === '取消（他で確定）') return '<p class="muted">「取消（他で確定）」は、同じ人が別のカテゴリで先に確定したため、こちらを取り消した状態です。</p>';
     return '';
   }
@@ -56,7 +56,7 @@
     var pos = e.status === 'キャンセル待ち' && e.position ? ' ' + esc(e.position) + '番目です' : '';
     $('#v-my').innerHTML =
       (note ? '<div class="' + (note.ok ? 'banner open' : 'warn') + '" role="status" id="note">' + esc(note.text) + '</div>' : '') +
-      '<h1>申込み内容の確認</h1>' +
+      '<h1>申し込み内容の確認</h1>' +
       '<p>状態：' + chip(e.status) + pos + '</p>' +
       explain(e) +
       '<dl class="sum"><dt>受付番号</dt><dd>' + esc(e.no) + '</dd>' +
@@ -64,7 +64,7 @@
       '<dt>代表者</dt><dd>' + person(e.p1) + '</dd>' +
       '<dt>ペア</dt><dd>' + person(e.p2) + '</dd></dl>' +
       (active ? '<h2>キャンセルする</h2><p class="muted">キャンセルすると元に戻せません。</p>' +
-        '<button class="btn danger" type="button" id="open-cancel">この申込みをキャンセルする</button>' : '');
+        '<button class="btn danger" type="button" id="open-cancel">この申し込みをキャンセルする</button>' : '');
     var b = $('#open-cancel');
     if (b) b.addEventListener('click', openDialog);
     if (note) root.scrollTo(0, 0);
@@ -127,7 +127,7 @@
       if (res && res.code === 'notFound') { message('確認できません', BAD_LINK, false); return; }
       throw new Error('bad');
     }).catch(function () {
-      message('読み込めませんでした', '申込み内容を読み込めませんでした。通信状況を確認して、もう一度お試しください。', true);
+      message('読み込めませんでした', '申し込み内容を読み込めませんでした。通信状況を確認して、もう一度お試しください。', true);
     });
   }
 

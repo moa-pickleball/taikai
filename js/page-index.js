@@ -1,4 +1,4 @@
-// 大会ページ・申込みフォーム・完了画面（index.html の #app に描く）
+// 大会ページ・申し込みフォーム・完了画面（index.html の #app に描く）
 (function (root) {
   'use strict';
 
@@ -127,13 +127,14 @@
     return data.categories.map(function (c) { return c.id + ':' + phaseOf(c) + ':' + c.remaining + ':' + c.waitlist; }).join(',');
   }
 
-  // ---- 申込みフォーム ----
+  // ---- 申し込みフォーム ----
   var PF = root.PersonFields;
 
   function buildForm() {
     $('#v-form').innerHTML =
       '<button class="btn link" type="button" id="back">← 大会ページに戻る</button>' +
       '<h1>エントリー</h1><p class="muted" id="form-sub"></p>' +
+      '<datalist id="club-list"></datalist>' +
       '<form id="entry-form" novalidate>' +
       '<div class="field pc-half"><label for="cat">出場カテゴリ<span class="req">必須</span></label><select id="cat"></select><p class="hint" id="cat-hint"></p><p class="err" data-err="categoryId"></p></div>' +
       PF.html('p1', '代表者（あなた）', true) + PF.html('p2', 'ペア（パートナー）', false) +
@@ -169,6 +170,12 @@
     if (prev) sel.value = prev;                 // 選んだカテゴリが終わっていても、勝手に別のカテゴリへ替えない
     else if (sel.options.length) sel.selectedIndex = 0;
     updateCatHint();
+    updateClubList();
+  }
+  // 所属サークルの入力候補（既にエントリーのあるサークル名）
+  function updateClubList() {
+    var dl = $('#club-list');
+    if (dl) dl.innerHTML = data.clubs.map(function (c) { return '<option value="' + esc(c) + '">'; }).join('');
   }
   function updateCatHint() {
     var c = findCat($('#cat').value);
@@ -278,7 +285,7 @@
       (wait ? '<p>空きが出たら、順番に自動で「確定」になり、メールでお知らせします。まだ確定ではないのでご注意ください。</p>' : '') +
       '<h2>確認用リンク</h2><div class="linkbox"><input type="text" readonly id="my-link" aria-label="確認用リンク" value="' + esc(link) + '"><button class="btn sub" type="button" id="copy">リンクをコピー</button></div>' +
       '<p class="muted" id="copy-msg" role="status"></p>' +
-      '<div class="warn"><b>このリンクは保存してください。</b>' + (wait ? '順番の確認やキャンセルは、このリンクから行います。' : '申込み内容の確認やキャンセルは、このリンクから行います。メールにも送りました。') + '</div>';
+      '<div class="warn"><b>このリンクは保存してください。</b>' + (wait ? '順番の確認やキャンセルは、このリンクから行います。' : '申し込み内容の確認やキャンセルは、このリンクから行います。メールにも送りました。') + '</div>';
     $('#copy').addEventListener('click', copyLink);
     show('v-done');
     root.scrollTo(0, 0);
@@ -313,7 +320,7 @@
 
   function apply(res) {
     setOffset(res.serverTime, res._t[0], res._t[1]);
-    data = { tournament: res.tournament, categories: res.categories || [], notices: res.notices || [] };
+    data = { tournament: res.tournament, categories: res.categories || [], notices: res.notices || [], clubs: res.clubs || [] };
     renderEvent();
     if (!$('#entry-form')) buildForm();
     updateForm();

@@ -301,7 +301,7 @@
 
   function render() { renderList(); renderPastNotices(); }
 
-  // ---- 申込み一覧 ----
+  // ---- 申し込み一覧 ----
   function catEntries(id) { return state.entries.filter(function (e) { return e.categoryId === id; }); }
   function catLabel(c) {
     var n = root.AdminLogic.statusCounts(catEntries(c.id));
@@ -324,7 +324,7 @@
 
   function renderList() {
     var L = root.AdminLogic, cats = state.categories, cur = findCat(curCat), box = $('#s-list');
-    if (!cur) { box.innerHTML = '<h2>申込み一覧</h2><p class="muted">カテゴリがありません。</p>'; return; }
+    if (!cur) { box.innerHTML = '<h2>申し込み一覧</h2><p class="muted">カテゴリがありません。</p>'; return; }
     var rows = catEntries(cur.id), n = L.statusCounts(rows);
     // 状態の順（確定・キャンセル待ち・それ以外）、同じ状態では受付番号の順
     var rank = { '確定': 0, 'キャンセル待ち': 1 };
@@ -333,7 +333,7 @@
       return ra - rb || a.no - b.no;
     });
     box.innerHTML =
-      '<h2 style="margin-top:0">申込み一覧</h2><p class="muted">DUPR が空の人は「仮DUPR」（運営が仮で入れた値）を表示します。DUPRも仮DUPRも無い人は「なし」です。</p>' +
+      '<h2 style="margin-top:0">申し込み一覧</h2><p class="muted">DUPR が空の人は「仮DUPR」（運営が仮で入れた値）を表示します。DUPRも仮DUPRも無い人は「なし」です。</p>' +
       '<div class="field only-sp"><label for="acat">カテゴリ</label><select id="acat">' + cats.map(function (c) {
         var l = catLabel(c);
         return '<option value="' + esc(c.id) + '"' + (c.id === cur.id ? ' selected' : '') + '>' + esc(l.main + '（' + l.small + '）') + '</option>';
@@ -348,7 +348,7 @@
       '<div class="cap-row"><div class="field"><label for="cap">定員（組）</label><input type="text" id="cap" inputmode="numeric" data-k="cap" autocomplete="off" value="' + esc(cur.capacity) + '"></div>' +
       '<button class="btn sub" type="button" id="cap-save">定員を保存</button></div><p class="err" data-err="cap" id="cap-err" role="alert"></p>' +
       '<div class="tablewrap"><table class="atable"><thead><tr><th>受付番号</th><th>状態</th><th>待ち順</th><th>代表</th><th>ペア</th><th>所属</th><th>DUPR（代表 / ペア）</th><th>受付日時</th><th>操作</th></tr></thead><tbody>' +
-      (rows.length ? rows.map(rowHtml).join('') : '<tr><td colspan="9" style="white-space:normal">このカテゴリの申込みはまだありません。</td></tr>') +
+      (rows.length ? rows.map(rowHtml).join('') : '<tr><td colspan="9" style="white-space:normal">このカテゴリの申し込みはまだありません。</td></tr>') +
       '</tbody></table></div>' +
       '<p class="muted"><span class="only-sp">表は横にスクロールできます。</span></p>';
   }
@@ -375,7 +375,7 @@
     var ops = active
       ? '<div class="btn-row"><button class="btn danger" type="button" data-dop="cancel">キャンセル</button><button class="btn sub" type="button" data-dop="member">メンバー変更</button>' +
         (root.AdminLogic.provisionalSlots(e).length ? '<button class="btn sub" type="button" data-dop="prov">仮DUPR</button>' : '') + '</div>'
-      : '<p class="muted">この申込みは「' + esc(e.status) + '」のため、操作はできません。</p>';
+      : '<p class="muted">この申し込みは「' + esc(e.status) + '」のため、操作はできません。</p>';
     var dlg = openDialog('<h2 id="dlg-t">受付番号 ' + esc(e.no) + '</h2><p>' + chip(e.status) + (e.position != null ? ' ' + esc(e.position) + '番目' : '') + '　' + esc(cat ? cat.name : '') + '　受付 ' + esc(root.AdminLogic.shortDate(e.createdAt)) + '</p>' +
       '<div class="fgrid">' + '<div>' + personBlock('代表', e.p1) + '</div><div>' + personBlock('ペア', e.p2) + '</div></div>' + ops +
       '<div class="btn-row"><button class="btn sub" type="button" id="dt-close">閉じる</button></div>', opener, true);
@@ -530,7 +530,7 @@
   function buildNotice() {
     var box = $('#s-notice');
     box.innerHTML = '<h2 style="margin-top:0">お知らせを送る</h2>' +
-      '<p class="muted">確定している申込みの代表者へメールで送り、大会ページにも載せます。送ったあとは取り消せません。</p>' +
+      '<p class="muted">確定している申し込みの代表者へメールで送り、大会ページにも載せます。送ったあとは取り消せません。</p>' +
       '<form id="n-form" novalidate><div class="field"><label for="n-title">タイトル<span class="req">必須</span></label><input type="text" id="n-title" data-k="title" maxlength="100" autocomplete="off"><p class="err" data-err="title"></p></div>' +
       '<div class="field"><label for="n-body">本文<span class="req">必須</span></label><textarea id="n-body" data-k="body" maxlength="5000"></textarea><p class="err" data-err="body"></p></div>' +
       '<div class="alert" id="n-alert" role="alert"></div>' +

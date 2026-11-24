@@ -52,6 +52,16 @@
   };
 
 
+  // 大会当日に小学生以下か（学年は4月1日始まり。6年生は3月31日まで小学生）
+  // 学年の年 Y = 当日が4月以降ならその年、3月以前なら前の年。(Y-12)-04-02 以降の生まれが小学生以下
+  Rules.isElementaryOrYounger = function (birth, eventDate) {
+    var b = parseDate(birth), o = parseDate(eventDate);
+    if (!b || !o) return false;
+    var cutY = (o.m >= 4 ? o.y : o.y - 1) - 12;
+    if (b.y !== cutY) return b.y > cutY;
+    return b.m > 4 || (b.m === 4 && b.d >= 2);
+  };
+
   function validatePerson(prefix, p, category, eventDate, errors) {
     function err(f, message) {
       errors.push({ field: prefix + '.' + f, message: message });
@@ -77,6 +87,7 @@
     var birthRaw = nfkc(p.birth).trim();
     if (!birthRaw) err('birth', '生年月日を入力してください');
     else if (!parseDate(birthRaw)) err('birth', '生年月日は西暦で、実在する日付を入力してください');
+    else if (Rules.isElementaryOrYounger(birthRaw, eventDate)) err('birth', '小学生以下の方はエントリーできません');
     else if (category && category.minAge != null && Rules.ageOn(birthRaw, eventDate) < category.minAge) {
       err('birth', '大会当日に' + category.minAge + '歳以上の方が対象です');
     }
