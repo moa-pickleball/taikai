@@ -44,7 +44,7 @@
     var h = function (f) { return ' data-p="' + p + '" data-f="' + f + '"'; };
     function err(f) { return '<p class="err" data-err="' + p + '.' + f + '"></p>'; }
     return '<fieldset data-dupr="" id="fs-' + p + '"><legend>' + title + '</legend><div class="fgrid">' +
-      '<div class="field"><label for="' + p + '-name">氏名<span class="req">必須</span></label><input type="text" id="' + p + '-name"' + h('name') + ac('name') + '>' + err('name') + '</div>' +
+      '<div class="field"><label for="' + p + '-name">氏名<span class="req">必須</span></label><input type="text" id="' + p + '-name" placeholder="例：山田 太郎"' + h('name') + ac('name') + '><p class="hint">姓と名の間に空白を入れてください。</p>' + err('name') + '</div>' +
       '<div class="field"><label for="' + p + '-kana">フリガナ<span class="req">必須</span></label><input type="text" id="' + p + '-kana"' + h('kana') + ' autocomplete="off">' + err('kana') + '</div>' +
       '<div class="field"><label for="' + p + '-phone">電話番号<span class="req">必須</span></label><input type="tel" inputmode="tel" id="' + p + '-phone"' + h('phone') + ac('tel') + '>' + (rep ? '<p class="hint">当日の緊急連絡にだけ使います。</p>' : '') + err('phone') + '</div>' +
       '<div class="field"><label for="' + p + '-email">メールアドレス<span class="req">必須</span></label><input type="email" inputmode="email" id="' + p + '-email"' + h('email') + ac('email') + '>' + (rep ? '<p class="hint">受付完了のお知らせを送ります。</p>' : '') + err('email') + '</div>' +
