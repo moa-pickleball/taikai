@@ -31,9 +31,13 @@
   }
   function $(sel) { return doc.querySelector(sel); }
 
-  function message(title, text, retry) {
+  // lost：リンクが正しくないとき。行き止まりにならないよう、大会のページへの道を出す（2026-11-27 UI/UX レビュー10。ops-system fc3f444 と同じ。
+  // ops-system には「進み具合を見る」もあるが、進み具合ページは3月まで本番に無いので、こちらには入れない）
+  function message(title, text, retry, lost) {
     $('#v-my').innerHTML = '<h1>' + esc(title) + '</h1><p>' + esc(text) + '</p>' +
-      (retry ? '<button class="btn" type="button" id="retry">もう一度読み込む</button>' : '');
+      (retry ? '<button class="btn" type="button" id="retry">もう一度読み込む</button>' : '') +
+      (lost ? '<div class="btn-row"><a class="btn sub" href="index.html">大会のページへ</a></div>' +
+        '<p class="muted">わからないときは、運営にお問い合わせください。</p>' : '');
     if (retry) $('#retry').addEventListener('click', function () { root.location.reload(); });
   }
 
@@ -124,7 +128,7 @@
   function load(note) {
     return api.post({ action: 'my', token: token }).then(function (res) {
       if (res && res.ok && res.entry) { render(res.entry, note); return; }
-      if (res && res.code === 'notFound') { message('確認できません', BAD_LINK, false); return; }
+      if (res && res.code === 'notFound') { message('確認できません', BAD_LINK, false, true); return; }
       throw new Error('bad');
     }).catch(function () {
       message('読み込めませんでした', '申し込み内容を読み込めませんでした。通信状況を確認して、もう一度お試しください。', true);
@@ -149,7 +153,7 @@
       message('ただいま準備中です', 'エントリーのしくみの設定がまだ終わっていないため、このページは使えません。運営にお問い合わせください。', false);
       return;
     }
-    if (!token) { message('確認できません', BAD_LINK, false); return; }
+    if (!token) { message('確認できません', BAD_LINK, false, true); return; }
     api = root.ApiClient.create({
       url: CFG.API_URL,
       fetch: function (u, o) { return root.fetch(u, o); },

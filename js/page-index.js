@@ -84,7 +84,9 @@
     else chip = '<span class="chip ok">残り ' + c.remaining + '組</span>';
     if (ph !== 'before') {
       var pct = c.capacity > 0 ? Math.min(100, Math.round(c.confirmed / c.capacity * 100)) : 100;
-      bar = '<div class="bar"><i' + (isFull(c) ? ' class="full"' : '') + ' style="width:' + pct + '%"></i></div>';
+      // バーだけだと残りが分からないので、数字も添える（2026-11-27 UI/UX レビュー9。ops-system fc3f444 と同じ）
+      bar = '<div class="bar"><i' + (isFull(c) ? ' class="full"' : '') + ' style="width:' + pct + '%"></i></div>' +
+        '<div class="bar-n">' + c.confirmed + ' / ' + c.capacity + '組</div>';
     }
     return '<div class="cat"><div class="cat-head"><div><div class="cat-name">' + esc(c.name) + '</div><div class="cat-sub">' + sub + '</div></div>' + chip + '</div>' + bar + '</div>';
   }
