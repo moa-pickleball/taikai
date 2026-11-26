@@ -63,6 +63,10 @@ p{margin:8px 0}
 .bar-n{margin-top:4px;font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:10px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:17px;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--accent-d)}
+/* 2行のボタン：1行目が本文、2行目が補足。どちらも行の途中では折り返さない */
+.btn-2l{flex-direction:column;gap:2px;line-height:1.35}
+.btn-2l>span{white-space:nowrap}
+.btn-2l .btn-note{font-size:14px}
 .btn.disabled,.btn:disabled{background:var(--disabled);color:var(--muted);cursor:not-allowed}
 .btn.sub{background:#fff;color:var(--accent);border:2px solid var(--accent)}
 .btn.danger{background:#fff;color:var(--ng);border:2px solid var(--ng)}

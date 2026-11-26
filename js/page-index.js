@@ -98,7 +98,10 @@
         ? '<div class="banner wait">一部のカテゴリは定員に達しました。<br>キャンセル待ちとして受付中です</div>'
         : '<div class="banner open">受付中です</div>';
       if (s.full) note = '<p class="muted note">キャンセル待ちは、空きが出た順に自動で繰り上がり、メールでお知らせします。</p>';
-      btn = '<button class="btn" type="button" id="go" style="margin-top:16px">エントリーする' + (s.full ? '（キャンセル待ちを含む）' : '') + '</button>';
+      // 「キャンセル待ちを含む」は2行目に分けて小さく出す（1行に詰めると、スマホで「含／む）」と変な所で切れるため）
+      btn = s.full
+        ? '<button class="btn btn-2l" type="button" id="go" style="margin-top:16px"><span>エントリーする</span><span class="btn-note">（キャンセル待ちを含む）</span></button>'
+        : '<button class="btn" type="button" id="go" style="margin-top:16px">エントリーする</button>';
     } else if (next) {
       banner = '<div class="banner before"><div>受付開始まで（' + esc(openText(next.iso)) + ' 開始）</div><div class="count" id="count">' + countdownText(next.t - serverNow()) + '</div></div>';
       btn = '<span class="btn disabled" style="margin-top:16px" aria-disabled="true">受付開始までお待ちください</span>';
