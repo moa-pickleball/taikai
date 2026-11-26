@@ -1,18 +1,36 @@
-/* 色とフォントは、ここ（:root）だけ直せば全体が変わります */
+/* 数字と英字だけ Inter（自分のサイトから出す。日本語は下の --font の標準フォント）。太さは 400 と 700 の2つだけ（600 は 700 で出る） */
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+/* 色とフォントは、ここ（:root）だけ直せば全体が変わります
+   配色（2026-11-25）：土台の紺・海の青・水色はそのまま。背景・文字・線をやわらかくし、箱は枠線でなく影で区切る（--line-soft は表の中の区切り、--mine-bg は自分の行、--chip は小さな印） */
 :root{
-  --bg:#f4f6fa; --card:#fff; --text:#1c1c1e; --muted:#5f6670; --line:#d9dee7;
-  --accent:#0a6cff; --accent-d:#0856cc; --accent-bg:#e8f1ff; --focus:#9cc4ff;
-  --ok:#1a7f37; --ok-bg:#e6f4ea;
-  --wait:#9a5b00; --wait-bg:#fff3d6; --ng:#b3261e; --ng-bg:#fde8e6; --gray-bg:#eceef2;
-  --input-border:#aab2bf; --disabled:#b9c0cc; --overlay:rgba(28,28,30,.55);
-  --font:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+  --bg:#f4f6f8; --card:#fff; --text:#0f2133; --muted:#5a6b7b; --line:#e1e7ec; --line-soft:#eef2f5;
+  --accent:#1e5a80; --accent-d:#16465f; --accent-bg:#e4edf3; --focus:#3b95ad; --tint:#f4f8fb;
+  --ok:#1a6650; --ok-bg:#e1efe9;
+  --wait:#7d4e00; --wait-bg:#f8eed8; --wait-bar:#b9822c; --ng:#a3302a; --ng-bg:#f8e6e3; --gray-bg:#e8edf1;
+  --input-border:#8394a2; --pill-border:#c2cdd6; --disabled:#dce3e9; --overlay:rgba(20,38,58,.55);
+  --brand:#14263a; --sky:#7fccdd;
+  --mine-bg:#e8f1f7; --chip:#14526f; --chip-bg:#e3f4f8; --sub-on-brand:#c9d6e1;
+  --radius-card:16px; --shadow-card:0 1px 2px rgba(15,33,51,.06),0 4px 14px rgba(15,33,51,.05); --shadow-raise:0 8px 22px rgba(15,33,51,.18);
+  --font:"Inter","Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.7;overflow-wrap:anywhere}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.7;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+/* ページの上の紺の帯（右の斜めの2本は、ポスターの形をもとにした飾り） */
+.site-head{position:relative;overflow:hidden;background:var(--brand);color:#fff}
+.site-head::before,.site-head::after{content:"";position:absolute;top:0;bottom:0;transform:skewX(-28deg)}
+.site-head::before{right:46px;width:34px;background:var(--accent)}
+.site-head::after{right:14px;width:16px;background:var(--sky);opacity:.55}
+.site-head-in{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:12px 96px 12px 16px;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 12px}
+.site-brand{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--sky)}
+.site-name{font-size:16px;font-weight:700;line-height:1.4}
+body.screen .site-head{display:none}
+/* 見出しの前の、水色の斜めの印 */
+.frame h2:not(.pr-title)::before{content:"";display:inline-block;width:6px;height:.95em;margin-right:8px;background:var(--sky);transform:skewX(-20deg);vertical-align:-.1em}
 .wrap{max-width:720px;margin:0 auto;padding:16px}
-.frame{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin:0 0 16px}
+.frame{background:var(--card);border-radius:var(--radius-card);padding:20px 16px;box-shadow:var(--shadow-card);margin:0 0 16px}
 h1{font-size:22px;line-height:1.4;margin:0 0 4px}
 h2{font-size:18px;margin:20px 0 8px}
 p{margin:8px 0}
@@ -38,10 +56,10 @@ p{margin:8px 0}
 .chip.gray{background:var(--gray-bg);color:var(--muted)}
 .bar{height:8px;background:var(--gray-bg);border-radius:99px;margin-top:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent)}
-.bar i.full{background:var(--wait)}
+.bar i.full{background:var(--wait-bar)}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:10px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:17px;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--accent-d)}
-.btn.disabled,.btn:disabled{background:var(--disabled);cursor:not-allowed}
+.btn.disabled,.btn:disabled{background:var(--disabled);color:var(--muted);cursor:not-allowed}
 .btn.sub{background:#fff;color:var(--accent);border:2px solid var(--accent)}
 .btn.danger{background:#fff;color:var(--ng);border:2px solid var(--ng)}
 .btn.danger:hover{background:var(--ng-bg)}
@@ -126,7 +144,14 @@ tr.cancelled td:nth-child(2){text-decoration:none}
 .dialog.form{text-align:left;max-width:720px;max-height:92vh;overflow:auto}
 .dialog.form h2{margin-top:0}
 .plain{margin:6px 0;padding:0 0 0 1.2em}
-@media (min-width:700px){.wrap{padding:24px}.frame{padding:28px}h1{font-size:26px}}
+@media (min-width:700px){.wrap{padding:24px}.frame{padding:28px}h1{font-size:26px}.site-head-in{padding:14px 120px 14px 24px}}
+@media (min-width:960px){
+  .site-head-in{max-width:1200px;padding:16px 200px 16px 32px}
+  .site-head.wide .site-head-in{max-width:1100px}
+  .site-head::before{right:90px;width:60px}
+  .site-head::after{right:40px;width:26px}
+  .site-name{font-size:17px}
+}
 /* ---- PC向け（画面の幅が960px以上のとき） ---- */
 @media (min-width:960px){
   .wrap{max-width:1200px;padding:32px}
@@ -165,3 +190,467 @@ tr.cancelled td:nth-child(2){text-decoration:none}
 
 /* 入力欄を押したら、見本の文字（placeholder）を消す。見本の数字が入力済みの値に見えてしまうため */
 input:focus::placeholder,textarea:focus::placeholder{color:transparent}
+
+/* ---- 本部の結果入力（honbu.html） ---- */
+.warnbox{border-radius:10px;padding:10px 12px;font-size:15px;margin:10px 0}
+.warnbox.ng{background:var(--ng-bg);color:var(--ng)}
+.warnbox.wait{background:var(--wait-bg);color:var(--wait)}
+.warnbox.ok{background:var(--ok-bg);color:var(--ok)}
+.hq-grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+.hq-grid>*{min-width:0}
+.matchbox{border:2px solid var(--accent);border-radius:12px;padding:12px 14px;background:var(--tint)}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin:10px 0}
+.side{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center}
+.side .pno{font-size:28px;font-weight:700;line-height:1.2}
+.side .nm{font-size:14px}
+.vs-mid{font-weight:700;color:var(--muted)}
+.score-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.score-row input{font-size:32px;text-align:center;font-weight:700;min-height:64px}
+.score-row .dash{font-size:28px;text-align:center}
+.q-chip{display:inline-block;border-radius:99px;padding:2px 12px;font-weight:700;font-size:14px}
+.q-chip.zero{background:var(--ok-bg);color:var(--ok)}
+.q-chip.some{background:var(--ng-bg);color:var(--ng)}
+.qbar{position:sticky;top:0;z-index:6;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--ng);color:#fff;font-weight:700;border-radius:10px;padding:8px 12px;margin:0 0 12px}
+.qbar .btn{background:#fff;color:var(--ng)}
+.rec{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:6px 0;font-size:15px}
+.rec .ops{flex:0 0 auto}
+.rules{border:0;background:var(--accent-bg);border-radius:12px;padding:8px 14px;margin:10px 0;font-size:14px}
+.rules ul{margin:2px 0 0;padding-left:1.3em}
+.tiebox{border:2px solid var(--ng);background:var(--ng-bg);border-radius:12px;padding:10px 14px;margin:10px 0}
+.tiebox select{width:auto;min-width:6em;min-height:44px;margin:2px 4px 2px 0}
+.tiebox label{display:inline-block;font-weight:400;margin-right:8px}
+.btn.sm{min-height:44px;padding:4px 12px;font-size:14px;width:auto}
+@media (min-width:960px){
+  .hq-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;column-gap:32px}
+}
+
+/* ---- 管理画面の「抽選」「タイムテーブル」タブ ---- */
+.maintabs{display:flex;gap:4px;margin:12px 0 0;border-bottom:2px solid var(--line)}
+.maintabs .tab{flex:1 0 auto;min-height:48px;font-size:16px;white-space:nowrap;padding-left:8px;padding-right:8px}
+.lot-grid{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.lot-grid>*{min-width:0}
+.lot-grid .cat{margin:0}
+.lot-groups{margin-top:10px}
+.lot-groups summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--accent);font-weight:700}
+.grp{margin:10px 0 0;font-size:15px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pill{font:inherit;font-size:15px;border:2px solid var(--pill-border);background:#fff;color:var(--muted);border-radius:99px;padding:2px 16px;min-height:44px;cursor:pointer}
+.pill.on{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);font-weight:700}
+.ttscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;margin:8px 0}
+table.tt{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:780px;font-size:13px}
+.tt th,.tt td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center;padding:0;line-height:1.35;white-space:normal}
+.tt thead th{background:var(--gray-bg);position:sticky;top:0;padding:6px 2px}
+.tt th.tm{width:64px;background:var(--gray-bg);position:sticky;left:0;z-index:1;font-size:13px;padding:3px 2px}
+.tt tr.sp td{background:var(--bg);color:var(--muted);font-weight:700;padding:8px 4px}
+.tt td.cell{height:60px;background:#fff;vertical-align:middle}
+.tt td.cell.done{background:var(--ok-bg)}
+.tt td.cell.sel{outline:3px solid var(--accent);outline-offset:-3px;background:var(--accent-bg)}
+.tt .tc{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;min-height:60px;min-width:44px;background:none;border:0;font:inherit;color:inherit;cursor:pointer;padding:3px 2px}
+.tt .tc:hover{background:var(--accent-bg)}
+.tt .tc-cat{font-size:12px;color:var(--muted)}
+.tt .tc-pair{font-size:16px;font-weight:700}
+.tt .tc-no{font-size:12px;color:var(--muted)}
+.tt .c1{border-left:5px solid #66579f}.tt .c2{border-left:5px solid #1e5a80}.tt .c3{border-left:5px solid #1f7b80}.tt .c4{border-left:5px solid #a84468}.tt .c5{border-left:5px solid #ad5e22}
+.tt-key{margin:4px 0}
+.un-list{display:flex;gap:8px;flex-wrap:wrap}
+.chip.un{border:2px solid transparent;font:inherit;font-weight:700;min-height:44px;cursor:pointer}
+.chip.un.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+@media (min-width:960px){
+  .lot-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+  .ttscroll{overflow-x:auto}
+}
+.tt .tc-mark{font-size:18px;font-weight:700;line-height:1.2}
+
+/* ---- 大会進行ページ（tournament.html） ---- */
+.wrap.wide{max-width:720px}
+.t-wait{text-align:center;margin-top:24px}
+/* 「自分のペアを探す」で選んだペア：リーグ表の行とトーナメント表の欄を薄い青に、左に青い線 */
+.lg tr.mine th.lg-pair,.lg tr.mine td:not(.lg-self):not(.tie){background:var(--mine-bg)}
+.lg tr.mine th.lg-pair{box-shadow:inset 4px 0 0 var(--accent)}
+.bk-t.mine{box-shadow:inset 4px 0 0 var(--accent)}
+.bk-t.mine:not(.win){background:var(--mine-bg)}
+.lgs{display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}
+.lgwrap{margin:10px 0 18px}
+table.lg{width:100%;font-size:13px;text-align:center;border:1px solid var(--line);border-collapse:collapse;background:#fff}
+.lg th,.lg td{border:1px solid var(--line);padding:4px 4px}
+.lg thead th{background:var(--gray-bg);font-size:12px;white-space:nowrap}
+.lg th.lg-pair{text-align:left;min-width:112px;background:#fff;font-weight:400;line-height:1.3}
+.lg thead th.lg-pair{background:var(--gray-bg);font-weight:700}
+.lg th.lg-pair b{display:inline-block;min-width:1.4em;font-size:16px}
+.lg th.lg-pair .n2{display:block;font-size:11px;color:var(--muted);padding-left:1.6em}
+.lg td.lg-self{background:repeating-linear-gradient(135deg,#eef2f5,#eef2f5 4px,#e1e7ec 4px,#e1e7ec 8px)}
+.lg td.lg-c{min-width:48px}
+.lg .mark{display:block;font-size:26px;font-weight:700;line-height:1.1}
+.lg .sc{display:block;font-size:12px;color:var(--muted);line-height:1.2}
+.lg td.w .mark{color:var(--ok)}
+.lg td.l .mark{color:var(--ng)}
+.lg td.fw .sc{color:var(--wait);font-weight:700}
+.lg .lg-wait{color:#a9b5bf;font-size:20px}
+.lg td.st{font-size:15px;font-weight:700;min-width:44px}
+.lg td.rk{font-size:20px;font-weight:700;color:var(--accent)}
+.lg td.rk.prov{color:var(--muted);font-size:15px}
+.lg td.rk small{display:block;font-size:10px;font-weight:400}
+.lg td.rk.tie{color:var(--ng);font-size:14px;background:var(--ng-bg)}
+.br{display:flex;gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;align-items:flex-start}
+.br-col{flex:0 0 190px;display:flex;flex-direction:column;gap:8px}
+.br-col h4{margin:0;font-size:14px;color:var(--muted);text-align:center}
+.bk{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.bk-h{display:flex;justify-content:space-between;gap:4px;background:var(--gray-bg);padding:2px 8px;font-size:12px;color:var(--muted)}
+.bk-h b{font-size:16px;color:var(--text)}
+.bk-t{padding:3px 8px;font-size:13px;line-height:1.3;border-top:1px solid var(--line)}
+.bk-t .ref{color:var(--muted)}
+.bk-t b{margin-right:4px}
+.bk-t small{display:block;color:var(--muted);font-size:11px}
+.bk-t.win{background:var(--ok-bg);font-weight:700}
+.bk-s{border-top:1px solid var(--line);padding:2px 8px;font-size:13px;text-align:right;color:var(--muted)}
+@media (min-width:960px){
+  .wrap.wide{max-width:1100px}
+  .lgs{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 24px}
+}
+
+/* ---- 進み具合（スマホ）：tour-phone.js。tp- は全体・状態の行・下のタブ・カテゴリの列、rk- は組の順位の一覧 ----
+   中身は PC でも 720px の幅。ページの下に、下のタブの高さ分（＋iPhone のホームバーの分）の余白 */
+#tp{max-width:720px;margin:0 auto;padding-bottom:76px;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.tp-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 14px}
+.tp-head-t{min-width:0}
+.tp-head h1{margin:0;font-size:20px;line-height:1.35}
+.tp-upd{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.tp-reload{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:99px;background:var(--card);color:var(--accent);box-shadow:var(--shadow-card);cursor:pointer}
+.tp-reload[aria-disabled="true"]{color:var(--muted);box-shadow:none;cursor:default}   /* 読み込み中（押せない。フォーカスは残す） */
+#tp-warn .warn{margin:0 0 14px}
+.tp-note{margin:0;padding:16px;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);color:var(--muted);font-size:15px}
+.tp-chip{display:inline-block;padding:1px 10px;border-radius:99px;background:var(--chip-bg);color:var(--chip);font-size:13px;font-weight:700;line-height:1.6;white-space:nowrap}
+.tp-reload:focus-visible,.tp-tab:focus-visible,.tp-cat:focus-visible,.rk-row:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.rk-row:focus-visible{outline-offset:-3px}
+/* カテゴリの横1列（折り返さない）。右端が切れていると分かるように、右の端を薄くする */
+.tp-cats{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scroll-padding-inline:4px 32px;padding:4px;margin:0 -4px 6px;
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+.tp-cats::after{content:"";flex:0 0 20px}
+@media (pointer:coarse){.tp-cats{scrollbar-width:none}.tp-cats::-webkit-scrollbar{display:none}}   /* 指で動かす画面では、ボタンの下の横のバーを出さない（PC はマウスで動かせるよう残す） */
+.tp-cat{flex:0 0 auto;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--text);font:inherit;font-size:15px;line-height:1.3;white-space:nowrap;cursor:pointer}
+.tp-cat[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff;font-weight:700}
+.tp-rank-note{margin:0 0 14px;font-size:13px;line-height:1.6;color:var(--muted)}
+/* 組の順位の一覧。行は押すと、その下に組の中の試合が開く */
+.rk-group{margin:0 0 20px}
+.rk-h{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:0 0 8px}
+.rk-h h2{margin:0;font-size:17px;line-height:1.4}
+.rk-state{margin-left:auto;font-size:13px;color:var(--muted)}
+.rk-list{list-style:none;margin:0;padding:0;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);overflow:hidden}
+.rk-item+.rk-item{border-top:1px solid var(--line-soft)}
+.rk-item.mine{background:var(--mine-bg);box-shadow:inset 4px 0 0 var(--accent)}
+.rk-row{display:grid;grid-template-columns:2.2em 1.5em minmax(0,1fr) 2.1em 2.6em 18px;column-gap:6px;align-items:center;width:100%;min-height:56px;padding:8px 12px;border:0;background:none;color:inherit;font:inherit;font-size:16px;line-height:1.35;text-align:left;cursor:pointer}
+.rk-rank{font-weight:700}
+.rk-rank.tie{color:var(--ng);font-size:14px}
+.rk-no{font-size:14px;font-weight:700;color:var(--muted)}
+.rk-item.mine .rk-no{color:var(--accent)}
+.rk-name{min-width:0}
+.rk-n1,.rk-n2{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rk-n2{font-size:13px;color:var(--muted)}
+.rk-w{font-size:15px;font-weight:700;text-align:right}
+.rk-pt{font-size:15px;color:var(--muted);text-align:right}
+.rk-ic{display:flex;color:var(--muted)}
+.rk-item.open .rk-ic svg{transform:rotate(180deg)}
+/* 開く・閉じるは 0.2秒でなめらかに（grid-template-rows を動かせないブラウザでは、すぐ開く）。閉じるときは、動き終わってから隠す */
+.rk-more{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .2s ease,visibility 0s linear .2s}
+.rk-item.open .rk-more{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .2s ease,visibility 0s linear 0s}
+.rk-more-in{min-height:0;overflow:hidden}
+.rk-detail{padding:0 14px 12px 62px}
+.rk-games{list-style:none;margin:0;padding:0}
+.rk-games li{padding:2px 0;font-size:15px}
+.rk-mk.w{color:var(--ok)}
+.rk-mk.l{color:var(--ng)}
+.rk-diff{margin:4px 0 0;font-size:15px;font-weight:700}
+.rk-key{margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+/* ---- 進み具合（スマホ）のトーナメント：rd- は回戦の横めくりとカード ---- */
+.tp-stages{display:flex;gap:8px;margin:0 0 10px}
+.tp-stage{flex:1 1 0;min-height:44px;padding:0 8px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);font:inherit;font-size:15px;line-height:1.3;cursor:pointer}
+.tp-stage[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-bg);color:var(--accent-d);font-weight:700}
+.rd-nav{margin:0 0 8px}
+.rd-tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.rd-tabs::-webkit-scrollbar{display:none}
+.rd-tab{flex:1 0 auto;min-height:44px;padding:0 12px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);font:inherit;font-size:16px;white-space:nowrap;cursor:pointer}
+.rd-tab[aria-selected="true"]{color:var(--accent);font-weight:700;border-bottom-color:var(--accent)}
+.rd-tab:focus-visible,.tp-stage:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.rd-dots{display:flex;justify-content:center;gap:8px;padding:6px 0 0}
+.rd-dot{width:8px;height:8px;border-radius:99px;background:var(--line)}
+.rd-dot.on{background:var(--accent)}
+.rd-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -4px}
+.rd-track::-webkit-scrollbar{display:none}
+.rd-panel{flex:0 0 100%;box-sizing:border-box;min-width:0;scroll-snap-align:start;scroll-snap-stop:always;padding:4px 4px 8px;display:flex;flex-direction:column;gap:12px}
+.rd-card{background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);overflow:hidden}
+.rd-h{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;border-bottom:1px solid var(--line-soft);font-size:15px}
+.rd-mk{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 6px;border-radius:99px;background:var(--brand);color:#fff;font-size:15px}
+.rd-when{font-weight:700;font-feature-settings:'tnum'}
+.rd-fw{margin-left:auto;font-size:13px;font-weight:700;color:var(--muted)}
+.rd-side{display:flex;align-items:center;gap:8px;min-height:56px;padding:8px 14px;font-size:16px;line-height:1.35}
+.rd-side+.rd-side{border-top:1px solid var(--line-soft)}
+.rd-side.mine{background:var(--mine-bg);box-shadow:inset 4px 0 0 var(--accent)}
+.rd-side.ref{color:var(--muted)}
+.rd-w{flex:0 0 1.2em;font-weight:700;color:var(--ok)}
+.rd-no{flex:0 0 auto;min-width:2.2em;font-size:14px;font-weight:700;color:var(--muted)}
+.rd-nm{flex:1 1 auto;min-width:0}
+.rd-nm span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rd-nm span+span{font-size:13px;color:var(--muted)}
+.rd-side.win .rd-nm span:first-child,.rd-side.win .rd-no{font-weight:700;color:var(--text)}
+.rd-sc{flex:0 0 auto;min-width:1.6em;text-align:right;font-size:20px;font-weight:700;font-feature-settings:'tnum'}
+.rd-hint{margin:6px 0 0;font-size:13px;color:var(--muted);text-align:center}
+
+/* 画面の下に固定の3つのタブ。PC でも、ボタンは中身と同じ 720px の幅の中に並べる */
+.tp-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:0;padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:var(--card);box-shadow:0 -1px 0 var(--line),0 -6px 16px rgba(15,33,51,.05)}
+.tp-nav-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:720px;margin:0 auto;padding:6px 8px 8px}
+.tp-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:0 4px;border:0;border-radius:12px;background:none;color:var(--muted);font:inherit;font-size:13px;line-height:1.3;cursor:pointer}
+.tp-ic{display:flex;align-items:center;justify-content:center;width:56px;height:30px;border-radius:99px}
+.tp-tab[aria-current="page"]{color:var(--accent);font-weight:700}
+.tp-tab[aria-current="page"] .tp-ic{background:var(--chip-bg)}
+
+/* 会場の大きな画面（?view=screen）：横1280×縦720の舞台を、窓に合わせて拡大・縮小する */
+body.screen{margin:0;background:#0c1823;color:#e6eef4;overflow:hidden}
+.stage-outer{position:fixed;inset:0;padding:0}
+.stage-outer .t-wait{background:#132331;border:1px solid #24394b;box-shadow:none;color:#e6eef4;max-width:640px;margin:20vh auto 0}
+.stage-outer .t-wait .muted{color:#93a6b6}
+.biginner{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:top left;color:#e6eef4;background:#0c1823;padding:16px 24px;display:flex;flex-direction:column;font-size:18px;line-height:1.4}
+.bg-head{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:2px solid #24394b;padding-bottom:8px;margin-bottom:10px}
+.bg-title{font-size:26px;font-weight:700}
+.bg-tabs{display:flex;gap:8px}
+.bg-tab{font:inherit;font-size:18px;border:2px solid #3a5266;background:transparent;color:#c4d2dd;border-radius:10px;padding:2px 18px;cursor:pointer}
+.bg-tab.on{background:#7fccdd;color:#0c1823;border-color:#7fccdd;font-weight:700}
+.bg-sub{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;min-height:0;color:#7fccdd;font-weight:700}
+.bg-sub .bg-tab{font-size:15px;padding:0 12px}
+.bg-sub .gap{width:12px}
+.bg-body{flex:1;min-height:0;overflow:hidden}
+.bg-foot{font-size:13px;color:#93a6b6;display:flex;justify-content:space-between;gap:16px;margin-top:4px}
+.bg-foot .bad{color:#f5c26b;font-weight:700}
+.courts{display:grid;grid-template-rows:repeat(2,1fr);gap:10px;height:100%}
+.bc{background:#132331;border:1px solid #24394b;border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;min-height:0;min-width:0}
+.bc-court{font-size:24px;font-weight:700;color:#7fccdd}
+.bc-lbl{font-size:12px;color:#93a6b6}
+.bc-cat{font-size:15px;font-weight:700;color:#a9c8dc}
+.bc-pair{font-size:14px;line-height:1.3;margin:2px 0}
+.bc-pair b{font-size:22px;margin-right:6px;color:#fff}
+.bc-pair.ref{color:#93a6b6}
+.bc-pair.none{color:#93a6b6}
+.bc-vs{font-size:12px;color:#93a6b6;text-align:center}
+.bc-live{color:#f59a8c;font-weight:700;font-size:13px}
+.bc-next{margin-top:auto;border-top:1px dashed #24394b;padding-top:4px;font-size:13px;color:#c4d2dd}
+.biginner table.lg{background:#132331;color:#e6eef4;border-color:#24394b;font-size:14px}
+.biginner .lg th,.biginner .lg td{border-color:#24394b;padding:2px 3px}
+.biginner .lg thead th,.biginner .lg th.lg-pair{background:#1a2e3e;color:#e6eef4}
+.biginner .lg thead th.lg-pair{background:#24394b}
+.biginner .lg th.lg-pair .n2{color:#93a6b6}
+.biginner .lg td.rk.tie{background:#3a2023;color:#f59a8c}
+.biginner .lg .mark{font-size:22px}
+.biginner .lg td.lg-c{min-width:0}
+.biginner .lg .w .mark{color:#74d2a8}
+.biginner .lg .l .mark{color:#f59a8c}
+.biginner .lg .sc{color:#93a6b6;font-size:13px}
+.biginner .lg td.fw .sc{color:#f5c26b}
+.biginner .lg td.lg-self{background:repeating-linear-gradient(135deg,#162836,#162836 4px,#1d3242 4px,#1d3242 8px)}
+.biginner .lg td.rk{color:#7fccdd}
+.biginner .lg td.rk.prov{color:#93a6b6}
+.biginner .lgwrap{margin:0}
+.bg-leagues{display:grid;gap:10px 18px;height:100%;align-content:start}
+.bg-leagues.g2,.bg-leagues.g3,.bg-leagues.g4{grid-template-columns:1fr 1fr}
+.bg-leagues.g5,.bg-leagues.g6{grid-template-columns:1fr 1fr 1fr;gap:8px 10px;font-size:12px}
+.bg-leagues.g5 table.lg,.bg-leagues.g6 table.lg{font-size:12px}
+.bg-leagues.g6 .lg th.lg-pair{min-width:34px}
+.bg-leagues.g6 .lg th.lg-pair .n1,.bg-leagues.g6 .lg th.lg-pair .n2{display:none}
+.bg-leagues.g5 .lg th.lg-pair .n2{display:none}
+.bg-leagues.g5 .lg thead th,.bg-leagues.g6 .lg thead th{font-size:11px;padding:2px 1px}
+.bg-leagues.g5 .lg td.st,.bg-leagues.g6 .lg td.st{min-width:0;font-size:13px}
+.bg-tour{padding-top:6px}
+.biginner .br{gap:16px}
+.biginner .br-col{flex:0 0 232px}
+.biginner .br-col h4{color:#93a6b6;font-size:16px}
+.biginner .bk{background:#132331;border-color:#24394b}
+.biginner .bk-h{background:#1a2e3e;color:#93a6b6;font-size:13px}
+.biginner .bk-h b{color:#7fccdd;font-size:20px}
+.biginner .bk-t{border-color:#24394b;font-size:15px}
+.biginner .bk-t .ref,.biginner .bk-t small,.biginner .bk-s{color:#93a6b6}
+.biginner .bk-t.win{background:#123a2e;color:#74d2a8}
+.biginner .bk-s{border-color:#24394b}
+
+/* ---- 印刷（管理画面の「印刷」タブ。dev/preview-print.html も同じ見た目）----
+   用紙の大きさ（@page）は、印刷のたびに JS が <style id="print-page"> で入れる。
+   .sheet が用紙1ページ（以上）。画面では用紙の幅で見せ、印刷では body.printing のときだけ、印刷する内容以外を消す */
+.pr-opts{display:grid;gap:0 12px;grid-template-columns:minmax(0,1fr)}
+.print-area{margin-top:12px;overflow-x:auto;color:#000;font-size:11pt;line-height:1.35;background:#e9ecf1;padding:10px;border-radius:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.print-area .sheet{background:#fff;margin:0 0 12px;border:1px solid #888;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.print-area .a4p{width:194mm}
+.print-area .a3l{width:404mm;padding:0 2mm}
+.print-area .pr-empty{background:#fff;padding:16px;margin:0;border-radius:8px}
+.print-area .pr-title{font-size:20pt;margin:0 0 3mm;line-height:1.3}
+.print-area .pr-sub{margin:0 0 2mm;font-size:10pt}
+.print-area .pr-note{margin:0 0 3mm;padding:2mm 4mm 2mm 8mm;border:1.5px solid #000;font-size:13pt;font-weight:700}
+.print-area .pr-key{margin:3mm 0 0;font-size:10pt}
+/* 受付一覧 */
+.print-area table.rc{width:100%;border-collapse:collapse;font-size:11pt}
+.rc th,.rc td{border:1px solid #000;padding:1.5mm 2mm;text-align:left;vertical-align:middle}
+.rc thead{display:table-header-group}
+.rc thead th{background:#e5e5e5;font-size:10pt;text-align:center}
+.rc tr{break-inside:avoid}
+.rc td{height:13mm}
+.rc .rc-no{width:20mm;text-align:center;font-size:15pt}
+.rc .rc-cat{width:16mm;text-align:center}
+.rc .rc-club{width:46mm;font-size:10pt}
+.rc .rc-mark{width:22mm}
+.rc .rc-nm small{display:inline-block;width:9mm;font-size:8pt;margin-right:1mm}
+.rc .rc-nm div,.rc .rc-club div{min-height:1.35em}
+/* 報告用紙：A4たてに4枚 */
+.print-area .slip-page{height:279mm;display:grid;grid-template-rows:repeat(4,1fr);gap:3mm;padding:0}
+.slip{border:0.5mm solid #000;padding:1.5mm 3mm;font-size:10.5pt;display:flex;flex-direction:column;justify-content:space-between;min-height:0;overflow:hidden}
+.slip-title{font-size:13pt;font-weight:700;text-align:center;border-bottom:0.3mm solid #000;padding-bottom:0.5mm}
+.slip-info{display:flex;gap:4mm;flex-wrap:wrap}
+.slip-info b{font-size:13pt}
+.slip-main{display:grid;grid-template-columns:minmax(0,1fr) 20mm 6mm 20mm minmax(0,1fr);gap:2mm;align-items:stretch}
+.slip-pair{border:0.3mm solid #000;padding:0.5mm 2mm;font-size:9.5pt;display:flex;flex-direction:column;min-width:0}
+.slip-pair .pn b{font-size:17pt;margin-left:2mm;display:inline-block;min-width:14mm;vertical-align:middle}
+.slip-pair .lb{font-size:8pt;color:#333}
+.slip-pair .nm{font-size:11pt}
+.slip-pair .cl{font-size:8pt;color:#333}
+.slip-pair .ref{font-size:11pt;font-weight:700;border:0.3mm dashed #000;padding:0 1.5mm;align-self:flex-start;margin:0.5mm 0}
+.slip-blank{border-bottom:0.3mm solid #000;min-height:6mm;display:block}
+.slip-pair .pn b.slip-blank{display:inline-block;border-bottom:0.3mm solid #000;min-height:8mm;vertical-align:bottom}
+.slip-box{border:0.5mm solid #000;display:flex;flex-direction:column;align-items:center;font-size:8pt;min-height:19mm}
+.slip-box span{background:#eee;width:100%;text-align:center}
+.slip-dash{align-self:center;text-align:center;font-size:16pt}
+.slip-foot{font-size:8.5pt;color:#333}
+/* リーグ表：A3よこ（1行に2組。1つの表は途中で切らない） */
+.lgs{display:grid;gap:4mm 6mm;align-items:start}
+.lgs.cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.print-area .lgwrap{margin:0;break-inside:avoid}
+.print-area table.lg{width:100%;table-layout:fixed;border:0.4mm solid #000;font-size:10pt}
+.print-area .lg th,.print-area .lg td{border:0.3mm solid #000}
+.print-area .lg thead th{background:#e5e5e5;font-size:9pt;white-space:normal}
+.print-area .lg th.lg-pair{width:38mm;min-width:0;padding:1mm 1.5mm;font-size:9.5pt}
+.print-area .lg th.lg-pair b{font-size:14pt;float:left;margin-right:1.5mm}
+.print-area .lg th.lg-pair span{display:block;overflow:visible;white-space:normal;overflow-wrap:anywhere}
+.print-area .lg th.lg-pair .n2{padding-left:0;color:#000;font-size:9.5pt}
+.print-area .lg th.lg-pair .cl{font-size:7.5pt;color:#333;clear:both}
+.print-area .lg td{padding:0.5mm;text-align:center}
+.print-area .lg td.lg-c{height:15mm;min-width:0}
+.print-area .lg td.lg-self{background:#ccc}
+.print-area .lg .mark{font-size:26pt;font-weight:700;color:#000;line-height:1.05}
+.print-area .lg .sc{font-size:9pt;color:#000;white-space:nowrap}
+.print-area .lg td.fw .sc{font-weight:700}
+.print-area .lg td.st{font-size:12pt;font-weight:700;min-width:0}
+.print-area .lg td.rk{font-size:16pt;font-weight:700;color:#000;background:none}
+/* トーナメント表：A3よこ */
+.print-area .br{display:flex;gap:5mm;align-items:stretch;overflow:visible}
+.print-area .br-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:space-around;gap:3mm}
+.print-area .br-col h4{margin:0;font-size:12pt;color:#000;text-align:center}
+.print-area .bk{border:0.4mm solid #000;border-radius:0;background:#fff;break-inside:avoid}
+.print-area .bk-h{display:flex;justify-content:space-between;gap:2mm;background:#e5e5e5;color:#000;padding:0.5mm 2mm;font-size:9pt}
+.print-area .bk-h b{font-size:14pt;color:#000}
+.print-area .bk-t{padding:1mm 2mm;font-size:10pt;line-height:1.25;border-top:0.3mm solid #000;min-height:9mm}
+.print-area .bk-t .ref{color:#000;font-weight:700}
+.print-area .bk-t small{display:block;font-size:8pt;color:#333}
+.print-area .bk-t.win{background:#eee;font-weight:700}
+.print-area .bk-s{border-top:0.3mm solid #000;padding:0.5mm 2mm;font-size:10pt;text-align:right;color:#000}
+/* タイムテーブル：A3よこ */
+.print-area table.ptt{width:100%;table-layout:fixed;border-collapse:collapse;font-size:10pt}
+.ptt th,.ptt td{border:0.3mm solid #000;text-align:center;padding:0.5mm 1mm;vertical-align:middle}
+.ptt thead{display:table-header-group}
+.ptt thead th{background:#e5e5e5;font-size:11pt}
+.ptt tr{break-inside:avoid}
+.ptt th.tm{width:16mm;background:#e5e5e5}
+.ptt tr.sp td{background:#f1f1f1;font-weight:700;padding:2.5mm}
+.ptt td.cell{height:12mm}
+.ptt .tc-top,.ptt .tc-pair{display:block}
+.ptt .tc-top{font-size:9pt}
+.ptt .tc-top b{font-size:10pt}
+.ptt .tc-pair{font-size:12pt;font-weight:700}
+.ptt .c1{border-left:1.2mm solid #66579f}.ptt .c2{border-left:1.2mm solid #1e5a80}.ptt .c3{border-left:1.2mm solid #1f7b80}.ptt .c4{border-left:1.2mm solid #a84468}.ptt .c5{border-left:1.2mm solid #ad5e22}
+@media (min-width:640px){
+  .pr-opts{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media print{
+  body.printing{background:#fff;color:#000}
+  body.printing .site-head{display:none!important}
+  body.printing .wrap{max-width:none;margin:0;padding:0}
+  body.printing .wrap>*:not(#s-print),body.printing #s-print>*:not(.print-area),body.printing .no-print{display:none!important}
+  body.printing #s-print{background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin:0}
+  body.printing .print-area{margin:0;padding:0;background:none;border-radius:0;overflow:visible}
+  body.printing .print-area .sheet{border:0;box-shadow:none;margin:0;break-after:page}
+  body.printing .print-area .sheet.a4p,body.printing .print-area .sheet.a3l{width:auto}
+  body.printing .print-area .sheet:last-child{break-after:auto}
+}
+
+/* ---- 進み具合（スマホ）の「自分」タブ：探す画面・ペアの箱・紺の「次の試合」・そのあと・結果・ルール ---- */
+.tp-h{margin:0 0 8px;font-size:15px;line-height:1.4}
+.tp-sec{margin:20px 0 0}
+.tp-find{margin:0 0 16px}
+.tp-lbl{display:block;margin:0 0 6px;font-size:14px;font-weight:700}
+.tp-q{background:var(--card);border-color:var(--input-border)}
+.tp-res{display:flex;flex-direction:column;gap:8px;margin:10px 0 0}
+.tp-none{margin:4px 0;padding:14px 16px;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);color:var(--muted);font-size:15px}
+.tp-cand{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 14px;border:0;border-radius:var(--radius-card);background:var(--card);box-shadow:var(--shadow-card);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.tp-cand-no{flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 6px;border-radius:99px;background:var(--brand);color:#fff;font-weight:700;font-size:16px}
+.tp-cand-t{display:flex;flex-direction:column;min-width:0}
+.tp-cand-cat{font-size:13px;color:var(--muted)}
+.tp-cand-n{font-size:16px;font-weight:700}
+.tp-cand:focus-visible,.tp-again:focus-visible,.tp-golg:focus-visible,.tp-rules summary:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.tp-q:focus-visible{outline:3px solid var(--focus)}
+/* ペアの箱：番号の丸・カテゴリと組・2人の名前・選び直す */
+.tp-pair{display:flex;align-items:center;gap:14px;margin:0 0 14px;padding:14px 16px;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card)}
+.tp-pair:focus{outline:none}
+.tp-pair:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.tp-pair-no{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:99px;background:var(--brand);color:#fff;font-size:22px;font-weight:700}
+.tp-pair-t{flex:1 1 auto;display:flex;flex-direction:column;min-width:0}
+.tp-pair-cat{font-size:13px;font-weight:700;color:var(--muted)}
+.tp-pair-n{font-size:16px;font-weight:700;line-height:1.45}
+.tp-pair-n small{font-size:13px;font-weight:400;color:var(--muted)}
+.tp-again{flex:0 0 auto;min-width:44px;min-height:44px;padding:0 4px;border:0;background:none;color:var(--accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+/* 次の試合：紺の面 */
+.tp-next{display:flex;flex-direction:column;gap:4px;margin:0 0 6px;padding:16px 18px;border-radius:var(--radius-card);background:var(--brand);color:#fff;box-shadow:var(--shadow-raise)}
+.tp-next-h{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--sky)}
+.tp-next-w{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 14px}
+.tp-next-time{font-size:48px;font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--sky)}
+.tp-next-time.none{font-size:30px}
+.tp-next-court{font-size:22px;font-weight:700;color:#fff}
+.tp-next-sub{display:flex;flex-direction:column;gap:2px;margin:6px 0 0;padding:10px 0 0;border-top:1px solid rgba(255,255,255,.14);font-size:15px;line-height:1.5;color:var(--sub-on-brand)}
+.tp-next-sub b{color:#fff}
+.tp-next-none{margin:0;font-size:18px;font-weight:700;line-height:1.5}
+.tp-next.idle .tp-next-sub{margin:2px 0 0;padding:0;border:0}
+p.tp-next-sub{display:block}
+/* そのあとの試合・これまでの結果 */
+.tp-later{list-style:none;margin:0;padding:0;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);overflow:hidden}
+.tp-later li{display:flex;align-items:baseline;gap:14px;padding:10px 16px}
+.tp-later li+li{border-top:1px solid var(--line-soft)}
+.tp-later-t{flex:0 0 auto;min-width:4.6em;font-size:17px;font-weight:700}
+.tp-later-t small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
+.tp-later-m{min-width:0;font-size:15px;line-height:1.5}
+.tp-done{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tp-done li{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border-radius:12px;box-shadow:var(--shadow-card)}
+.tp-mk{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:99px;background:var(--gray-bg);color:var(--muted);font-weight:700}
+.tp-mk.w{background:var(--ok-bg);color:var(--ok)}
+.tp-mk.l{background:var(--ng-bg);color:var(--ng)}
+.tp-done-t{display:flex;flex-direction:column;min-width:0;line-height:1.35}
+.tp-done-t small{font-size:13px;color:var(--muted)}
+.tp-done-t b{font-size:16px}
+/* リーグ表へ・ルール */
+.tp-golg{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin:-8px 0 0;border:2px solid var(--accent);border-radius:12px;background:var(--card);color:var(--accent);font:inherit;font-weight:700;cursor:pointer}
+.tp-rules{margin:20px 0 0;background:var(--card);border-radius:var(--radius-card);box-shadow:var(--shadow-card)}
+.tp-rules summary{display:flex;align-items:center;min-height:48px;padding:0 16px;border-radius:var(--radius-card);font-weight:700;cursor:pointer}
+.tp-rules ul{margin:0;padding:0 16px 12px 36px;font-size:15px;line-height:1.7}
+/* 検索欄が選ばれている間は、下のタブを隠す */
+.tp-typing .tp-nav{display:none}
+
+/* ---- 進み具合（スマホ）の動き（設計メモ 6.5 の4つだけ）と、押したときの色 ---- */
+/* 押したとき：ボタンの色を少し濃く（色の付いたボタンは明るさを下げ、色の無いボタンは薄い影の色を敷く） */
+.tp-cat:active,.tp-stage:active,.tp-cand:active,.tp-golg:active,.tp-reload:not([aria-disabled="true"]):active{filter:brightness(.94)}
+.tp-tab:active,.rk-row:active,.rd-tab:active,.tp-again:active,.tp-rules summary:active{background-color:rgba(15,33,51,.06)}
+/* 1. タブを替えたときだけ、中身が少し下から浮き上がる（0.2秒）。2. 行の開閉は .rk-more、3. 回戦めくりは .rd-track の scroll-snap */
+.tp-enter{animation:tp-enter .2s ease-out}
+@keyframes tp-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* 4. 新しい結果の光（1.5秒で水色から消える）。行とカードは上に水色を重ねる（multiply なので文字は濃いまま）。紺の「次の試合」は外側に水色の光 */
+.rk-row.tp-flash,.rd-card.tp-flash{position:relative}
+.rk-row.tp-flash::after,.rd-card.tp-flash::after{content:"";position:absolute;inset:0;background:var(--sky);mix-blend-mode:multiply;opacity:0;pointer-events:none;animation:tp-flash 1.5s ease-out}
+.tp-next.tp-flash{animation:tp-glow 1.5s ease-out}
+@keyframes tp-flash{from{opacity:.75}to{opacity:0}}
+@keyframes tp-glow{from{box-shadow:var(--shadow-raise),0 0 0 3px var(--sky),0 0 26px 8px var(--sky)}to{box-shadow:var(--shadow-raise),0 0 0 3px transparent,0 0 26px 8px transparent}}
+/* 動きを減らす設定：1〜3 は動かさずにすぐ切り替え、4 は光らせない */
+@media (prefers-reduced-motion:reduce){
+  .tp-enter,.tp-flash,.tp-next.tp-flash,.rk-row.tp-flash::after,.rd-card.tp-flash::after{animation:none}
+  .rk-more,.rk-item.open .rk-more{transition:none}
+  .rd-track{scroll-behavior:auto}
+}
