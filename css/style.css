@@ -42,14 +42,28 @@ p{margin:8px 0}
 .banner.open{background:var(--ok-bg);color:var(--ok);font-weight:700}
 .banner.wait{background:var(--wait-bg);color:var(--wait);font-weight:700}
 .banner.closed{background:var(--gray-bg);color:var(--muted);font-weight:700}
+/* 大会ページの見出し（D1）：右上に、ポスターと同じ傾きの斜めの帯3本と点を薄く敷く。文字は帯の手前で、地は白のまま（帯は右の端に寄せ、濃さも薄くして読みやすさを保つ） */
+.ev-hero{position:relative;margin:-20px -16px 0;padding:20px 16px 4px;border-radius:var(--radius-card) var(--radius-card) 0 0;overflow:hidden}
+.ev-hero>*{position:relative;z-index:1}
+.ev-hero::before{content:"";position:absolute;top:-10px;right:-30px;width:150px;height:calc(100% + 20px);
+  background:linear-gradient(90deg,transparent 0 18px,var(--sky) 18px 40px,transparent 40px 58px,var(--accent) 58px 70px,transparent 70px 88px,var(--sky) 88px 96px,transparent 96px);
+  opacity:.2;transform:skewX(-22deg)}
+.ev-hero::after{content:"";position:absolute;top:10px;right:118px;width:56px;height:36px;
+  background:radial-gradient(circle,var(--sky) 2.5px,transparent 3px) 0 0/12px 12px;opacity:.5}
+/* 大会ページの主ボタン（T1）：スマホではバナーの直下と、カテゴリの下の2か所。PC では下だけ（右の列） */
+.event-grid>.btn-top{margin:0 0 16px}
+.event-grid>.btn-main{margin-top:16px}
+.btn.link.to-event{display:flex;margin:0 0 4px;font-size:15px;text-decoration:underline;text-underline-offset:3px}
 .count{font-size:28px;font-weight:700;letter-spacing:.02em;color:var(--text)}
 .notices{margin:12px 0 0;padding:0;list-style:none}
 .notices li{background:var(--wait-bg);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:15px}
 .notices b{display:block}
 .cat{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
-/* 札（受付終了・残り○組など）は、いつも右上にそろえる（名前が長くても下の行へ回さない。2026-11-27 UI/UX レビュー9） */
-.cat-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.cat-head>div:first-child{min-width:0}
+/* 札（受付終了・残り○組など）は右上にそろえる（2026-11-27 レビュー9）。
+   ただし名前と札が1行に収まらないときは、札を名前の下の行へ回す（名前が「ミックスダ／ブルス」と途中で折れないように。2026-11-27 指示 T7）。
+   名前の側は、折り返さない長さ（max-content）を基本にし、それでも行に収まらない長い名前だけ折り返す */
+.cat-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;align-items:flex-start}
+.cat-head>div:first-child{flex:1 0 auto;max-width:100%;min-width:0}
 .cat-head .chip{flex:none}
 .cat-name{font-weight:700}
 .cat-sub{font-size:14px;color:var(--muted)}
@@ -57,12 +71,19 @@ p{margin:8px 0}
 .chip.ok{background:var(--ok-bg);color:var(--ok)}
 .chip.wait{background:var(--wait-bg);color:var(--wait)}
 .chip.gray{background:var(--gray-bg);color:var(--muted)}
+/* 札のアイコン（D2）。文字の前に小さく、文字と同じ色 */
+.chip-i{display:inline-block;width:14px;height:14px;margin:0 4px 0 -2px;vertical-align:-2px;flex:none}
 .bar{height:8px;background:var(--gray-bg);border-radius:99px;margin-top:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent)}
 .bar i.full{background:var(--wait-bar)}
 .bar-n{margin-top:4px;font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:10px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:17px;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--accent-d)}
+/* 送信ボタンの直上の見直し用の1行（T4） */
+.send-sum{margin:12px 0 8px;padding:8px 12px;border-radius:10px;background:var(--tint);font-size:14px;line-height:1.5}
+.send-sum-l{display:block;font-size:12px;color:var(--muted)}
+#send-sum-t{font-weight:700}
+#send-sum-t .nw{display:inline-block;max-width:100%}
 /* 2行のボタン：1行目が本文、2行目が補足。どちらも行の途中では折り返さない */
 .btn-2l{flex-direction:column;gap:2px;line-height:1.35}
 .btn-2l>span{white-space:nowrap}
@@ -153,6 +174,7 @@ tr.cancelled td:nth-child(2){text-decoration:none}
 .dialog.form h2{margin-top:0}
 .plain{margin:6px 0;padding:0 0 0 1.2em}
 @media (min-width:700px){.wrap{padding:24px}.frame{padding:28px}h1{font-size:26px}.site-head-in{padding:14px 120px 14px 24px}}
+@media (min-width:700px){.ev-hero{margin:-28px -28px 0;padding:28px 28px 4px}.ev-hero::before{width:220px}.ev-hero::after{right:180px}}
 @media (min-width:960px){
   .site-head-in{max-width:1200px;padding:16px 200px 16px 32px}
   .site-head.wide .site-head-in{max-width:1100px}
@@ -164,6 +186,7 @@ tr.cancelled td:nth-child(2){text-decoration:none}
 @media (min-width:960px){
   .wrap{max-width:1200px;padding:32px}
   .frame{padding:32px 36px}
+  .ev-hero{margin:-32px -36px 0;padding:32px 36px 4px}
   #v-form{max-width:960px;margin-left:auto;margin-right:auto}
   #v-done,#v-message,#v-my{max-width:640px;margin-left:auto;margin-right:auto}
   .event-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;column-gap:36px;grid-template-areas:"cats meta" "cats notices" "cats banner" "cats note" "cats btn" "cats .";grid-template-rows:auto auto auto auto auto 1fr;margin-top:16px}
@@ -171,7 +194,8 @@ tr.cancelled td:nth-child(2){text-decoration:none}
   .event-grid>.notices{grid-area:notices;margin:0 0 12px}
   .event-grid>.banner{grid-area:banner;margin:0 0 12px}
   .event-grid>.note{grid-area:note;margin:0 0 4px}
-  .event-grid>.btn{grid-area:btn;margin-top:4px!important}
+  .event-grid>.btn{grid-area:btn;margin-top:4px}
+  .event-grid>.btn-top{display:none}
   .event-grid>.cats{grid-area:cats}
   .event-grid>.cats>h2{margin-top:0}
   .fgrid{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
@@ -179,6 +203,7 @@ tr.cancelled td:nth-child(2){text-decoration:none}
   fieldset{padding:8px 20px 14px}
   .field.pc-half{max-width:calc(50% - 12px)}
   .btn.pc-center{max-width:400px;margin-left:auto;margin-right:auto}
+  .send-sum.pc-center{max-width:400px;margin-left:auto;margin-right:auto}
   /* 管理画面：タブで切り替え・表は横スクロールなし */
   .only-sp{display:none}
   .only-pc{display:block}
@@ -656,8 +681,19 @@ p.tp-next-sub{display:block}
 .tp-next.tp-flash{animation:tp-glow 1.5s ease-out}
 @keyframes tp-flash{from{opacity:.75}to{opacity:0}}
 @keyframes tp-glow{from{box-shadow:var(--shadow-raise),0 0 0 3px var(--sky),0 0 26px 8px var(--sky)}to{box-shadow:var(--shadow-raise),0 0 0 3px transparent,0 0 26px 8px transparent}}
+/* 読み込み中の見本（スケルトン。D3）：CSS だけの灰色の形を、ゆっくり薄く明滅させる。動きを減らす設定では止める */
+.sk{background:var(--gray-bg);border-radius:8px;animation:sk-pulse 1.4s ease-in-out infinite}
+.sk+.sk{margin-top:10px}
+.sk-h{height:28px;width:75%}
+.sk-l{height:14px}
+.sk-b{height:52px;border-radius:12px;margin-top:18px!important}
+.sk-card{height:84px;border-radius:12px}
+.sk-tall{height:160px;border-radius:var(--radius-card)}
+.sk-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes sk-pulse{50%{opacity:.55}}
 /* 動きを減らす設定：1〜3 は動かさずにすぐ切り替え、4 は光らせない */
 @media (prefers-reduced-motion:reduce){
+  .sk{animation:none}
   .tp-enter,.tp-flash,.tp-next.tp-flash,.rk-row.tp-flash::after,.rd-card.tp-flash::after{animation:none}
   .rk-more,.rk-item.open .rk-more{transition:none}
   .rd-track{scroll-behavior:auto}

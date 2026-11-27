@@ -44,7 +44,8 @@
   // 状態ごとの表示。ボタンを出すのは「確定」「キャンセル待ち」だけ
   function chip(status) {
     var cls = status === '確定' ? 'ok' : status === 'キャンセル待ち' ? 'wait' : 'gray';
-    return '<span class="chip ' + cls + '">' + esc(status) + '</span>';
+    var ic = { ok: 'check', wait: 'queue', gray: 'x' }[cls];   // 形でも状態が分かるように（D2。chip-icon.js）
+    return '<span class="chip ' + cls + '">' + (root.ChipIcon ? root.ChipIcon.svg(ic) : '') + esc(status) + '</span>';
   }
   function explain(e) {
     if (e.status === 'キャンセル待ち') return '<p>空きが出たら、順番に自動で「確定」になり、メールでお知らせします。まだ確定ではないのでご注意ください。</p>';
@@ -63,10 +64,14 @@
       '<h1>申し込み内容の確認</h1>' +
       '<p>状態：' + chip(e.status) + pos + '</p>' +
       explain(e) +
+      // 大会のページ（当日の案内・駐車場などのお知らせ）への道を、どの状態でも小さく出す（2026-11-27 指示 T10）
+      '<a class="btn link to-event" href="index.html">大会のページ（お知らせ）を見る →</a>' +
       '<dl class="sum"><dt>受付番号</dt><dd>' + esc(e.no) + '</dd>' +
       '<dt>カテゴリ</dt><dd>' + esc(e.categoryName) + '</dd>' +
       '<dt>代表者</dt><dd>' + person(e.p1) + '</dd>' +
       '<dt>ペア</dt><dd>' + person(e.p2) + '</dd></dl>' +
+      // お知らせの送り先（T3）。サーバーで @ の前を一部伏せてある（確認用リンクが転送されても全部は見えない）
+      (e.mailTo ? '<p class="muted mail-to">お知らせの送り先：' + esc(e.mailTo) + '</p>' : '') +
       (active ? '<h2>キャンセルする</h2><p class="muted">キャンセルすると元に戻せません。</p>' +
         '<button class="btn danger" type="button" id="open-cancel">この申し込みをキャンセルする</button>' : '');
     var b = $('#open-cancel');

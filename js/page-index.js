@@ -2,6 +2,19 @@
 (function (root) {
   'use strict';
 
+  // 送信ボタンの直上に出す、送る前の見直し用の1行（2026-11-27 指示 T4。確認の画面は作らない）
+  // 「ミックスダブルス（午前）／山田 太郎・佐藤 花子」。まだ入っていない所は「（〜 未入力）」
+  function sendSummaryParts(cat, p1Name, p2Name) {
+    function nm(v, who) { v = String(v == null ? '' : v).trim(); return v || '（' + who + 'の氏名 未入力）'; }
+    return [cat ? cat.name + (cat.session ? '（' + cat.session + '）' : '') : '（カテゴリ 未選択）', nm(p1Name, '代表者'), nm(p2Name, 'ペア')];
+  }
+  function sendSummaryText(cat, p1Name, p2Name) {
+    var a = sendSummaryParts(cat, p1Name, p2Name);
+    return a[0] + '／' + a[1] + '・' + a[2];
+  }
+  root.IndexData = { sendSummaryText: sendSummaryText, sendSummaryParts: sendSummaryParts };
+  if (!root.document) return;   // テスト用（node）
+
   var CFG = root.CONFIG || {};
   var doc = root.document;
   var app = doc.getElementById('app');
@@ -76,12 +89,13 @@
     return d > 0 ? 'あと ' + d + '日 ' + p(h) + '時間 ' + p(m) + '分' : 'あと ' + p(h) + '時間 ' + p(m) + '分 ' + p(s % 60) + '秒';
   }
 
+  function icon(name) { return root.ChipIcon ? root.ChipIcon.svg(name) : ''; }   // 札のアイコン（D2。chip-icon.js）
   function catHtml(c) {
     var ph = phaseOf(c), chip, bar = '', sub = esc(c.session) + '・定員' + c.capacity + '組';
-    if (ph === 'before') { chip = '<span class="chip gray">受付前</span>'; sub += '・' + esc(openText(c.opensAt)) + ' 開始'; }
-    else if (ph === 'closed') chip = '<span class="chip gray">受付終了</span>';
-    else if (isFull(c)) chip = '<span class="chip wait">満枠・キャンセル待ち ' + c.waitlist + '組</span>';
-    else chip = '<span class="chip ok">残り ' + c.remaining + '組</span>';
+    if (ph === 'before') { chip = '<span class="chip gray">' + icon('clock') + '受付前</span>'; sub += '・' + esc(openText(c.opensAt)) + ' 開始'; }
+    else if (ph === 'closed') chip = '<span class="chip gray">' + icon('x') + '受付終了</span>';
+    else if (isFull(c)) chip = '<span class="chip wait">' + icon('queue') + '満枠・キャンセル待ち ' + c.waitlist + '組</span>';
+    else chip = '<span class="chip ok">' + icon('check') + '残り ' + c.remaining + '組</span>';
     if (ph !== 'before') {
       var pct = c.capacity > 0 ? Math.min(100, Math.round(c.confirmed / c.capacity * 100)) : 100;
       // バーだけだと残りが分からないので、数字も添える（2026-11-27 UI/UX レビュー9。ops-system fc3f444 と同じ）
@@ -100,15 +114,18 @@
       if (s.full) note = '<p class="muted note">キャンセル待ちは、空きが出た順に自動で繰り上がり、メールでお知らせします。</p>';
       // 「キャンセル待ちを含む」は2行目に分けて小さく出す（1行に詰めると、スマホで「含／む）」と変な所で切れるため）
       btn = s.full
-        ? '<button class="btn btn-2l" type="button" id="go" style="margin-top:16px"><span>エントリーする</span><span class="btn-note">（キャンセル待ちを含む）</span></button>'
-        : '<button class="btn" type="button" id="go" style="margin-top:16px">エントリーする</button>';
+        ? function (id, cls) { return '<button class="btn btn-2l js-go' + cls + '" type="button" id="' + id + '"><span>エントリーする</span><span class="btn-note">（キャンセル待ちを含む）</span></button>'; }
+        : function (id, cls) { return '<button class="btn js-go' + cls + '" type="button" id="' + id + '">エントリーする</button>'; };
     } else if (next) {
       banner = '<div class="banner before"><div>受付開始まで（' + esc(openText(next.iso)) + ' 開始）</div><div class="count" id="count">' + countdownText(next.t - serverNow()) + '</div></div>';
-      btn = '<span class="btn disabled" style="margin-top:16px" aria-disabled="true">受付開始までお待ちください</span>';
+      btn = function (id, cls) { return '<span class="btn disabled' + cls + '" id="' + id + '" aria-disabled="true">受付開始までお待ちください</span>'; };
     } else {
       banner = '<div class="banner closed">受付は終了しました</div>';
-      btn = '<span class="btn disabled" style="margin-top:16px" aria-disabled="true">受付は終了しました</span>';
+      btn = function (id, cls) { return '<span class="btn disabled' + cls + '" id="' + id + '" aria-disabled="true">受付は終了しました</span>'; };
     }
+    // 主ボタンは同じ作り方で2つ出す（2026-11-27 指示 T1）：スマホではバナーの直下（go-top）にも置き、カテゴリを全部スクロールしなくても押せるようにする。
+    // PC（960px 以上）では上のボタンを隠し、右の列の下のボタン（go）だけ。受付前も押せないボタンを同じ位置に出し、開始と同時に位置がずれないようにする
+    var btnTop = btn('go-top', ' btn-top'), btnMain = btn('go', ' btn-main');
     var notices = '';
     if (data.notices && data.notices.length) {
       notices = '<ul class="notices">' + data.notices.map(function (n) {
@@ -118,13 +135,13 @@
     var cats = '';
     for (i = 0; i < data.categories.length; i++) cats += catHtml(data.categories[i]);
     $('#event-body').innerHTML =
-      '<h1>' + esc(t.name) + '</h1><p class="muted">主催：' + esc(CFG.ORGANIZER || '') + '</p>' +
+      // 大会名の見出しに、ポスター（ようこそ画面）の斜めの帯と点を薄く敷く（2026-11-27 指示 D1。飾りはここ1か所だけ。CSS だけで、絵は読み込まない）
+      '<div class="ev-hero"><h1>' + esc(t.name) + '</h1><p class="muted">主催：' + esc(CFG.ORGANIZER || '') + '</p></div>' +
       '<div class="event-grid"><ul class="meta"><li>日時：' + esc(dateText(t.date)) + '</li>' +
       (t.venue ? '<li>会場：' + esc(t.venue) + '</li>' : '') +
       '<li>参加費：' + yen(t.fee) + '／組（当日、現金でお支払いください）</li></ul>' +
-      notices + banner + '<div class="cats"><h2>カテゴリと' + (s.open.length ? '残り枠' : '定員') + '</h2>' + cats + '</div>' + note + btn + '</div>';
-    var go = $('#go');
-    if (go) go.addEventListener('click', showForm);
+      notices + banner + btnTop + '<div class="cats"><h2>カテゴリと' + (s.open.length ? '残り枠' : '定員') + '</h2>' + cats + '</div>' + note + btnMain + '</div>';
+    [].forEach.call(doc.querySelectorAll('#event-body .js-go'), function (go) { go.addEventListener('click', showForm); });
     lastPhases = phasesSig();
   }
 
@@ -144,11 +161,13 @@
       PF.html('p1', '代表者（あなた）', true) + PF.html('p2', 'ペア（パートナー）', false) +
       '<p class="muted" id="fee-note"></p>' +
       '<div class="alert" id="form-alert" role="alert"></div>' +
+      '<p class="send-sum pc-center" id="send-sum"><span class="send-sum-l">この内容で送ります</span><span id="send-sum-t"></span></p>' +
       '<button class="btn pc-center" type="submit" id="send">この内容でエントリーする</button>' +
       '</form>';
     $('#back').addEventListener('click', showEvent);
     $('#entry-form').addEventListener('submit', onSubmit);
-    $('#cat').addEventListener('change', updateCatHint);
+    $('#cat').addEventListener('change', function () { updateCatHint(); updateSendSum(); });
+    ['#p1-name', '#p2-name'].forEach(function (sel) { $(sel).addEventListener('input', updateSendSum); });
     PF.bind($('#entry-form'));
     // 所属サークルの入力候補（既にエントリーのあるサークル名。入力した文字に合うものだけ出す）
     ['#p1-club', '#p2-club'].forEach(function (sel) {
@@ -178,6 +197,12 @@
     if (prev) sel.value = prev;                 // 選んだカテゴリが終わっていても、勝手に別のカテゴリへ替えない
     else if (sel.options.length) sel.selectedIndex = 0;
     updateCatHint();
+    updateSendSum();
+  }
+  function updateSendSum() {
+    // 1つずつ途中で折り返さない（名前が「山田 太／郎」と切れないように）。区切りの「／」「・」でだけ改行
+    var a = sendSummaryParts(findCat($('#cat').value), $('#p1-name').value, $('#p2-name').value);
+    $('#send-sum-t').innerHTML = '<span class="nw">' + esc(a[0]) + '</span>／<span class="nw">' + esc(a[1]) + '</span>・<span class="nw">' + esc(a[2]) + '</span>';
   }
   function updateCatHint() {
     var c = findCat($('#cat').value);
@@ -282,8 +307,10 @@
       '<p class="muted" style="text-align:center;margin:0">受付番号</p><div class="no">' + esc(res.no) + '</div>' +
       '<dl class="sum"><dt>カテゴリ</dt><dd>' + esc(cat ? cat.name + '（' + cat.session + '）' : '') + '</dd>' +
       '<dt>ペア</dt><dd>' + esc(input.p1.name) + ' ／ ' + esc(input.p2.name) + '</dd>' +
-      (wait ? '<dt>状態</dt><dd><span class="chip wait">キャンセル待ち</span></dd>'
+      (wait ? '<dt>状態</dt><dd><span class="chip wait">' + icon('queue') + 'キャンセル待ち</span></dd>'
             : '<dt>参加費</dt><dd>' + yen(data.tournament.fee) + '／組（当日、現金）</dd>') + '</dl>' +
+      // 送り先を出し、打ち間違いにその場で気づけるようにする（T3）。入力されたものをそのまま出す
+      (input.p1.email ? '<p class="mail-to">お知らせは <b>' + esc(input.p1.email) + '</b> に送ります。</p>' : '') +
       (wait ? '<p>空きが出たら、順番に自動で「確定」になり、メールでお知らせします。まだ確定ではないのでご注意ください。</p>' : '') +
       '<h2>確認用リンク</h2><div class="linkbox"><input type="text" readonly id="my-link" aria-label="確認用リンク" value="' + esc(link) + '"><button class="btn sub" type="button" id="copy">リンクをコピー</button></div>' +
       '<p class="muted" id="copy-msg" role="status"></p>' +
@@ -379,7 +406,11 @@
       message('ただいま準備中です', 'エントリーのしくみの設定がまだ終わっていないため、このページは使えません。運営にお問い合わせください。', false);
       return;
     }
-    message('読み込み中…', '大会の情報を読み込んでいます。', false);
+    // 読み込み中は、文字だけでなくカードの形の灰色の見本（スケルトン）を出す（2026-11-27 指示 D3）。index.html の最初の表示と同じ形
+    $('#v-message').innerHTML = '<div class="skel" role="status" aria-busy="true"><span class="sk-sr">大会の情報を読み込んでいます</span>' +
+      '<div class="sk sk-h"></div><div class="sk sk-l" style="width:45%"></div><div class="sk sk-l" style="width:70%"></div><div class="sk sk-l" style="width:60%"></div>' +
+      '<div class="sk sk-b"></div><div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div></div>';
+    show('v-message');
     api = root.ApiClient.create({
       url: CFG.API_URL,
       fetch: function (u, o) { return root.fetch(u, o); },
